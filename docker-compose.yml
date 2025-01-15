@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: api
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: bringel2
+      DB_USERNAME: root
+      DB_PASSWORD: Nhaca70x07@
+    volumes:
+      - ./api:/var/www/html
+    ports:
+      - "8000:8000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - bringel2-net
+    command: ["sh", "-c", "/usr/bin/wait-for-db.sh mysql && php artisan serve --host=0.0.0.0 --port=8000"]
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Nhaca70x07@
+      MYSQL_DATABASE: bringel2
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    networks:
+      - bringel2-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    working_dir: /app
+    environment:
+      - NODE_ENV=development
+    networks:
+      - bringel2-net
+    command: npm run serve -- --port 80 --host 0.0.0.0
+
+volumes:
+  db_data:
+
+networks:
+  bringel2-net:
+    driver: bridge

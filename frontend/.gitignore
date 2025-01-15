@@ -1,0 +1,24 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Diretórios de dependências
+node_modules/
+
+# Diretórios de construção de produção
+dist/
+build/
+
+# Arquivos de lock
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Arquivos locais de ambiente
+.env.local
+.env.*.local
+
+# Cache de desenvolvimento local
+.vuepress/.cache/
+.vuepress
