@@ -3,18 +3,24 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Database\Seeders\AdminUserSeeder; // Importar o seeder AdminUserSeeder
+use Database\Seeders\AdminUserSeeder;
+use Database\Seeders\CategoriaSeeder;
+use Database\Seeders\ProdutoSeeder;
 
 class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
+     *
+     * @return void
      */
-    public function run(): void
+    public function run()
     {
-        // Chama o seeder do AdminUser
+        // Chama os Seeders
         $this->call([
             AdminUserSeeder::class,
+            CategoriaSeeder::class,
+            ProdutoSeeder::class,
         ]);
     }
 }
