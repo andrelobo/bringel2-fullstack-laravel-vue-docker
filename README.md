@@ -60,12 +60,27 @@ BRIGEL2-FULLSTACK é uma aplicação web full-stack construída usando Laravel p
     php artisan migrate
     ```
 
-7. Compile os assets do frontend:
+7. Rode o seeder para criar um usuário administrador:
+    ```bash
+    php artisan db:seed --class=UserSeeder
+    ```
+
+    O seeder deve conter:
+    ```php
+    DB::table('users')->insert([
+        'name' => 'Teste de seeder',
+        'email' => 'teste@hotmail.com',
+        'password' => Hash::make('admin123'),
+        'role' => 'admin',
+    ]);
+    ```
+
+8. Compile os assets do frontend:
     ```bash
     npm run dev
     ```
 
-8. Sirva a aplicação:
+9. Sirva a aplicação:
     ```bash
     php artisan serve
     ```
@@ -108,7 +123,12 @@ BRIGEL2-FULLSTACK é uma aplicação web full-stack construída usando Laravel p
     docker-compose exec app php artisan migrate
     ```
 
-6. Acesse a aplicação em `http://localhost:8000`
+6. Rode o seeder para criar um usuário administrador:
+    ```bash
+    docker-compose exec app php artisan db:seed --class=UserSeeder
+    ```
+
+7. Acesse a aplicação em `http://localhost:8000`
 
 ## Uso
 - Acesse a aplicação em `http://localhost:8000`
