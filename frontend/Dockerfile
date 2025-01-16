@@ -1,34 +1,35 @@
-# Estágio de build: Usando Node.js com npm como base
+# Estágio de build
 FROM node:18-alpine AS build-stage
 
-# Configuração do diretório de trabalho no contêiner
+# Atualizar e instalar bash (opcional para debugging)
+RUN apk update && apk add --no-cache bash
+
+# Definir diretório de trabalho no contêiner
 WORKDIR /app
 
-# Copiar apenas os arquivos de dependências para o contêiner
+# Copiar arquivos necessários para instalar dependências
 COPY package.json package-lock.json ./
 
-# Instalar dependências utilizando npm
-RUN npm install --production=false
+# Instalar dependências
+RUN npm install
 
-# Copiar o restante do código do projeto para o contêiner
+# Copiar o restante do projeto
 COPY . .
 
-# Construir o aplicativo para produção
+# Construir a aplicação
 RUN npm run build
 
-# ---
-
-# Estágio de produção: Usando Nginx como servidor
+# Estágio de produção com Nginx
 FROM nginx:stable-alpine AS production-stage
 
-# Copiar os arquivos buildados do estágio anterior para o diretório padrão do Nginx
+# Copiar arquivos construídos para o diretório padrão do Nginx
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 
-# Adicionar configuração personalizada do Nginx (se aplicável)
+# Copiar configuração personalizada do Nginx (se aplicável)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expor a porta 80 usada pelo Nginx
+# Expor a porta 80 para o Nginx
 EXPOSE 80
 
-# Comando para manter o Nginx em execução no contêiner
+# Iniciar o Nginx
 CMD ["nginx", "-g", "daemon off;"]
