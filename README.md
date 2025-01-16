@@ -118,17 +118,12 @@ BRIGEL2-FULLSTACK é uma aplicação web full-stack construída usando Laravel p
     docker-compose up --build
     ```
 
-5. Execute as migrações do banco de dados:
+5. Execute as migrações do banco de dados e rode o seeder para criar um usuário administrador:
     ```bash
-    docker-compose exec app php artisan migrate
+    docker-compose exec app bash -c "php artisan migrate && php artisan db:seed --class=UserSeeder"
     ```
 
-6. Rode o seeder para criar um usuário administrador:
-    ```bash
-    docker-compose exec app php artisan db:seed --class=UserSeeder
-    ```
-
-7. Acesse a aplicação em `http://localhost:8000`
+6. Acesse a aplicação em `http://localhost:8000`
 
 ## Uso
 - Acesse a aplicação em `http://localhost:8000`
